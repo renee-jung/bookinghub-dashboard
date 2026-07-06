@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookinghub YoY 비교 — 25년 vs 26년</title>
+<style>
+.viz-root {
+  --surface-1: #fcfcfb;
+  --surface-2: #f2f2f0;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.09);
+  --s1: #2a78d6;   /* 25년 / GC — blue */
+  --s2: #1baf7a;   /* 26년 / 홈+수기 — aqua */
+  --s3: #eda100;   /* Naver — yellow */
+  --delta: #006300;
+}
+@media (prefers-color-scheme: dark) {
+  .viz-root {
+    --surface-1: #1a1a19;
+    --surface-2: #0d0d0d;
+    --text-primary: #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.09);
+    --s1: #3987e5;
+    --s2: #199e70;
+    --s3: #c98500;
+    --delta: #0ca30c;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--surface-2);
+  color: var(--text-primary);
+  padding: 28px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
+.sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.kpi {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.kpi-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: .02em; }
+.kpi-val { font-size: 30px; font-weight: 800; color: var(--delta); line-height: 1; margin-bottom: 3px; }
+.kpi-detail { font-size: 11px; color: var(--text-secondary); }
+
+/* Chart cards */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px 14px;
+}
+.card-full { margin-bottom: 14px; }
+.card-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.card-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+
+/* Legend */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-secondary); }
+.ld { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+/* Tooltip */
+#tooltip {
+  position: fixed; background: var(--surface-1); border: 1px solid var(--baseline);
+  border-radius: 7px; padding: 8px 12px; font-size: 12px; pointer-events: none;
+  opacity: 0; transition: opacity .1s; z-index: 999;
+  box-shadow: 0 3px 12px rgba(0,0,0,.13); min-width: 130px;
+}
+#tooltip.on { opacity: 1; }
+#tt-title { font-weight: 700; margin-bottom: 3px; }
+#tt-body { color: var(--text-secondary); line-height: 1.6; }
+
+@media (max-width: 620px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .row2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body class="viz-root">
+
+<h1>Bookinghub 월누적 YoY 비교</h1>
+<div class="sub">25년 vs 26년 · 5월·6월 말일 기준 누적</div>
+
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="kpi-label">NET GMV YoY · 5월</div>
+    <div class="kpi-val">+490%</div>
+    <div class="kpi-detail">11.2억 → 65.9억</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">NET GMV YoY · 6월</div>
+    <div class="kpi-val">+332%</div>
+    <div class="kpi-detail">22.2억 → 95.7억</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">제휴점 수 YoY · 5월</div>
+    <div class="kpi-val">+718%</div>
+    <div class="kpi-detail">189개 → 1,547개</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">제휴점 수 YoY · 6월</div>
+    <div class="kpi-val">+536%</div>
+    <div class="kpi-detail">268개 → 1,705개</div>
+  </div>
+</div>
+
+<div class="row2">
+  <div class="card">
+    <div class="card-title">Net GMV 월누적</div>
+    <div class="card-sub">억원 기준 · 말일 누적</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-gmv" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+  <div class="card">
+    <div class="card-title">예약건수 (Net)</div>
+    <div class="card-sub">개 기준 · 말일 누적</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-orders" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+</div>
+
+<div class="card card-full">
+  <div class="card-title">채널별 Net GMV (절대값)</div>
+  <div class="card-sub">GC · Naver · 홈페이지+수기예약 · 억원 기준</div>
+  <div class="legend">
+    <span class="li"><span class="ld" style="background:var(--s1)"></span>GC</span>
+    <span class="li"><span class="ld" style="background:var(--s3)"></span>Naver</span>
+    <span class="li"><span class="ld" style="background:var(--s2)"></span>홈페이지+수기</span>
+  </div>
+  <svg id="c-channel" width="100%" style="display:block;overflow:visible"></svg>
+</div>
+
+<div class="card card-full">
+  <div class="card-title">취소율 (월누적, 금액 기준)</div>
+  <div class="card-sub">Canceled / Gross GMV · %</div>
+  <div class="legend">
+    <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+    <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+  </div>
+  <svg id="c-cancel" width="100%" style="display:block;overflow:visible"></svg>
+</div>
+
+<div class="row2">
+  <div class="card">
+    <div class="card-title">ASP (평균 예약금액)</div>
+    <div class="card-sub">Net GMV ÷ 예약건수 · 원 기준 · 말일 당일</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-asp" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+  <div class="card">
+    <div class="card-title">ADR (평균 1박 요금)</div>
+    <div class="card-sub">Net GMV ÷ 숙박일수 · 원 기준 · 말일 당일</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-adr" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+</div>
+
+<div class="row2">
+  <div class="card">
+    <div class="card-title">숙박일수 총 (말일 당일)</div>
+    <div class="card-sub">room-nights · 일 기준</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-nights" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+  <div class="card">
+    <div class="card-title">예약당 박 수 (말일 당일)</div>
+    <div class="card-sub">평균 박 수 · 일 기준</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-nights-per-booking" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
+</div>
+
+<div class="card card-full" style="margin-bottom:14px">
+  <div class="card-title">제휴점당 월 숙박일수 추이 (25년 5월 ~ 26년 6월)</div>
+  <div class="card-sub">월 Net 예약건수 × 예약당 박 수 ÷ 제휴점 수 · 가정: 제휴점 평균 객실 6개 × 30일 = 월 재고 180개</div>
+  <svg id="c-occ-trend" width="100%" style="display:block;overflow:visible;margin-top:12px"></svg>
+  <div class="card-title" style="font-size:12px;margin-top:16px;margin-bottom:2px">제휴점 수 (공급 증가 맥락)</div>
+  <svg id="c-store-trend" width="100%" style="display:block;overflow:visible"></svg>
+</div>
+
+<div id="tooltip"><div id="tt-title"></div><div id="tt-body"></div></div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+
+// ─── color resolver ───────────────────────────────────────────────────────
+const root = document.querySelector('.viz-root');
+function cv(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+
+// ─── tooltip ─────────────────────────────────────────────────────────────
+const tip = document.getElementById('tooltip');
+const ttTitle = document.getElementById('tt-title');
+const ttBody = document.getElementById('tt-body');
+
+function showTip(e, title, body) {
+  ttTitle.textContent = title;
+  ttBody.innerHTML = body;
+  tip.classList.add('on');
+  posTip(e);
+}
+function posTip(e) {
+  const x = e.clientX + 14, y = e.clientY - 10;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = (x + tw > innerWidth ? x - tw - 20 : x) + 'px';
+  tip.style.top  = (y + th > innerHeight ? y - th : y) + 'px';
+}
+function hideTip() { tip.classList.remove('on'); }
+document.addEventListener('mousemove', e => { if (tip.classList.contains('on')) posTip(e); });
+
+// ─── svg helpers ─────────────────────────────────────────────────────────
+function svgEl(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function svgText(txt, attrs, parent) {
+  const e = svgEl('text', attrs, parent);
+  e.textContent = txt;
+  return e;
+}
+
+// ─── grouped bar chart ───────────────────────────────────────────────────
+function groupedBar(id, months, opts) {
+  // months: [{label, v25, v26, fmt25, fmt26}]
+  const svg = document.getElementById(id);
+  const W = svg.getBoundingClientRect().width || 380;
+  const H = opts.h || 220;
+  svg.setAttribute('height', H);
+  svg.innerHTML = '';
+
+  const ml = opts.ml || 52, mr = 14, mt = 28, mb = 36;
+  const pw = W - ml - mr, ph = H - mt - mb;
+
+  const maxV = Math.max(...months.flatMap(m => [m.v25, m.v26]));
+  const yMax = maxV * 1.18;
+  const ys = v => mt + ph - (v / yMax) * ph;
+
+  // gridlines
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = yMax / ticks * i;
+    const y = ys(v);
+    svgEl('line', { x1: ml, x2: ml + pw, y1: y, y2: y, stroke: cv('--grid'), 'stroke-width': 1 }, svg);
+    svgText(opts.fmtY(v), { x: ml - 6, y: y + 4, 'text-anchor': 'end', 'font-size': 11, fill: cv('--text-muted') }, svg);
+  }
+  // baseline
+  svgEl('line', { x1: ml, x2: ml + pw, y1: ys(0), y2: ys(0), stroke: cv('--baseline'), 'stroke-width': 1.5 }, svg);
+
+  const gw = pw / months.length;
+  const bw = Math.min(gw * 0.32, 34);
+  const gap = bw * 0.35;
+
+  months.forEach((m, i) => {
+    const gx = ml + i * gw + gw / 2;
+    const bars = [
+      { v: m.v25, color: cv('--s1'), label: '25년', fmtV: m.fmt25 },
+      { v: m.v26, color: cv('--s2'), label: '26년', fmtV: m.fmt26 },
+    ];
+    bars.forEach((b, bi) => {
+      const bx = bi === 0 ? gx - bw - gap / 2 : gx + gap / 2;
+      const by = ys(b.v);
+      const bh = ys(0) - by;
+
+      // bar
+      const rect = svgEl('rect', { x: bx, y: by, width: bw, height: Math.max(bh, 1),
+        fill: b.color, rx: 3, style: 'cursor:pointer;transition:opacity .1s' }, svg);
+      rect.addEventListener('mouseenter', e => {
+        rect.setAttribute('opacity', '.78');
+        showTip(e, `${m.label} · ${b.label}`, b.fmtV);
+      });
+      rect.addEventListener('mouseleave', () => { rect.setAttribute('opacity', '1'); hideTip(); });
+
+      // top label (both bars)
+      svgText(opts.fmtLabel(b.v), {
+        x: bx + bw / 2, y: by - 4,
+        'text-anchor': 'middle', 'font-size': 10, 'font-weight': bi === 1 ? '700' : '400',
+        fill: bi === 1 ? cv('--text-primary') : cv('--text-muted')
+      }, svg);
+    });
+
+    // x label
+    svgText(m.label, { x: gx, y: H - mb + 18, 'text-anchor': 'middle',
+      'font-size': 12, fill: cv('--text-secondary') }, svg);
+  });
+}
+
+// ─── vertical stacked bar (absolute values) ──────────────────────────────
+function vertStackedBar(id, groups) {
+  // groups: [{label, segs:[{label, v, color}]}]
+  const svg = document.getElementById(id);
+  const W = svg.getBoundingClientRect().width || 600;
+  const H = 280;
+  svg.setAttribute('height', H);
+  svg.innerHTML = '';
+
+  const ml = 56, mr = 14, mt = 28, mb = 36;
+  const pw = W - ml - mr, ph = H - mt - mb;
+
+  const maxTotal = Math.max(...groups.map(g => g.segs.reduce((s, seg) => s + seg.v, 0)));
+  const yMax = maxTotal * 1.15;
+  const ys = v => mt + ph - (v / yMax) * ph;
+
+  // gridlines
+  const ticks = 4;
+  for (let i = 0; i <= ticks; i++) {
+    const v = yMax / ticks * i;
+    const y = ys(v);
+    svgEl('line', { x1: ml, x2: ml + pw, y1: y, y2: y, stroke: cv('--grid'), 'stroke-width': 1 }, svg);
+    svgText(v === 0 ? '0' : (v / 1e8).toFixed(0) + '억', {
+      x: ml - 6, y: y + 4, 'text-anchor': 'end', 'font-size': 11, fill: cv('--text-muted')
+    }, svg);
+  }
+  svgEl('line', { x1: ml, x2: ml + pw, y1: ys(0), y2: ys(0), stroke: cv('--baseline'), 'stroke-width': 1.5 }, svg);
+
+  const gw = pw / groups.length;
+  const bw = Math.min(gw * 0.55, 58);
+
+  groups.forEach((g, gi) => {
+    const gx = ml + gi * gw + gw / 2;
+    const bx = gx - bw / 2;
+    const total = g.segs.reduce((s, seg) => s + seg.v, 0);
+    let stackedV = 0;
+
+    // Draw segments bottom→top
+    [...g.segs].reverse().forEach((seg, rsi) => {
+      const si = g.segs.length - 1 - rsi;
+      const segH = (seg.v / yMax) * ph;
+      const by = ys(stackedV + seg.v);
+      const gap = si < g.segs.length - 1 ? 2 : 0; // gap between stacked segments
+
+      const rect = svgEl('rect', {
+        x: bx, y: by + gap, width: bw, height: Math.max(segH - gap, 1),
+        fill: seg.color, rx: 3, style: 'cursor:pointer;transition:opacity .1s'
+      }, svg);
+
+      const pct = (seg.v / total * 100).toFixed(1);
+      const abv = (seg.v / 1e8).toFixed(2);
+
+      // Segment label if tall enough
+      if (segH - gap > 18) {
+        svgText(abv + '억', {
+          x: gx, y: by + gap + (segH - gap) / 2 + 4,
+          'text-anchor': 'middle', 'font-size': 10, 'font-weight': '600', fill: '#ffffff'
+        }, svg);
+      }
+
+      rect.addEventListener('mouseenter', e => {
+        rect.setAttribute('opacity', '.78');
+        showTip(e, `${g.label} · ${seg.label}`, `${abv}억원<br>${pct}%`);
+      });
+      rect.addEventListener('mouseleave', () => { rect.setAttribute('opacity', '1'); hideTip(); });
+
+      stackedV += seg.v;
+    });
+
+    // Total label above bar
+    svgText((total / 1e8).toFixed(1) + '억', {
+      x: gx, y: ys(total) - 5,
+      'text-anchor': 'middle', 'font-size': 11, 'font-weight': '700', fill: cv('--text-primary')
+    }, svg);
+
+    // X label
+    svgText(g.label, {
+      x: gx, y: H - mb + 18,
+      'text-anchor': 'middle', 'font-size': 12, fill: cv('--text-secondary')
+    }, svg);
+  });
+}
+
+// ─── dumbbell chart ───────────────────────────────────────────────────────
+function dumbbell(id, rows, opts) {
+  // rows: [{label, v25, v26}]
+  // opts: {yMin, yMax, gridTicks:[], fmtTick, fmtTip}
+  opts = opts || {};
+  const svg = document.getElementById(id);
+  const W = svg.getBoundingClientRect().width || 600;
+  const H = 130;
+  svg.setAttribute('height', H);
+  svg.innerHTML = '';
+
+  const ml = 52, mr = 14, mt = 22, mb = 32;
+  const pw = W - ml - mr, ph = H - mt - mb;
+  const yMin = opts.yMin !== undefined ? opts.yMin : 24;
+  const yMax = opts.yMax !== undefined ? opts.yMax : 31;
+  const gridTicks = opts.gridTicks || [24, 26, 28, 30];
+  const fmtTick = opts.fmtTick || (v => v + '%');
+  const fmtTip  = opts.fmtTip  || (v => v + '%');
+  const ys = v => mt + ph - ((v - yMin) / (yMax - yMin)) * ph;
+
+  gridTicks.forEach(v => {
+    const y = ys(v);
+    svgEl('line', { x1: ml, x2: ml + pw, y1: y, y2: y, stroke: cv('--grid'), 'stroke-width': 1 }, svg);
+    svgText(fmtTick(v), { x: ml - 6, y: y + 4, 'text-anchor': 'end', 'font-size': 11, fill: cv('--text-muted') }, svg);
+  });
+  svgEl('line', { x1: ml, x2: ml + pw, y1: H - mb, y2: H - mb, stroke: cv('--baseline'), 'stroke-width': 1.5 }, svg);
+
+  const step = pw / (rows.length + 1);
+  rows.forEach((r, i) => {
+    const x = ml + (i + 1) * step;
+    const y25 = ys(r.v25), y26 = ys(r.v26);
+
+    svgEl('line', { x1: x, y1: Math.min(y25, y26), x2: x, y2: Math.max(y25, y26),
+      stroke: cv('--baseline'), 'stroke-width': 2, 'stroke-dasharray': '4 3' }, svg);
+
+    [{ v: r.v25, cy: y25, color: cv('--s1'), name: '25년' },
+     { v: r.v26, cy: y26, color: cv('--s2'), name: '26년' }].forEach(d => {
+      const c = svgEl('circle', { cx: x, cy: d.cy, r: 8, fill: d.color,
+        stroke: cv('--surface-1'), 'stroke-width': 2.5, style: 'cursor:pointer' }, svg);
+      c.addEventListener('mouseenter', e => {
+        c.setAttribute('r', '10');
+        showTip(e, `${r.label} · ${d.name}`, fmtTip(d.v));
+      });
+      c.addEventListener('mouseleave', () => { c.setAttribute('r', '8'); hideTip(); });
+    });
+
+    const lblY25 = r.v25 >= r.v26 ? y25 + 18 : y25 - 10;
+    const lblY26 = r.v26 >= r.v25 ? y26 + 18 : y26 - 10;
+    svgText(fmtTick(r.v25), { x: x - 22, y: lblY25, 'font-size': 11, 'font-weight': '600', fill: cv('--s1') }, svg);
+    svgText(fmtTick(r.v26), { x: x + 8,  y: lblY26, 'font-size': 11, 'font-weight': '600', fill: cv('--s2') }, svg);
+
+    svgText(r.label, { x, y: H - mb + 18, 'text-anchor': 'middle',
+      'font-size': 12, fill: cv('--text-secondary') }, svg);
+  });
+}
+
+// ─── 14-month efficiency data ────────────────────────────────────────────
+const effData = [
+  { label:'25년 5월',  perStore:33.2, occ:18.4, stores:189,   net:5710  },
+  { label:'25년 6월',  perStore:44.7, occ:24.8, stores:268,   net:9992  },
+  { label:'25년 7월',  perStore:50.9, occ:28.3, stores:310,   net:14352 },
+  { label:'25년 8월',  perStore:41.3, occ:22.9, stores:356,   net:12249 },
+  { label:'25년 9월',  perStore:29.9, occ:16.6, stores:523,   net:13045 },
+  { label:'25년 10월', perStore:22.5, occ:12.5, stores:642,   net:13135 },
+  { label:'25년 11월', perStore:25.7, occ:14.3, stores:700,   net:14975 },
+  { label:'25년 12월', perStore:26.0, occ:14.4, stores:826,   net:17931 },
+  { label:'26년 1월',  perStore:21.9, occ:12.2, stores:1043,  net:19001 },
+  { label:'26년 2월',  perStore:21.8, occ:12.1, stores:1151,  net:22838 },
+  { label:'26년 3월',  perStore:20.6, occ:11.4, stores:1304,  net:22405 },
+  { label:'26년 4월',  perStore:22.9, occ:12.7, stores:1445,  net:30109 },
+  { label:'26년 5월',  perStore:25.1, occ:13.9, stores:1547,  net:32373 },
+  { label:'26년 6월',  perStore:30.1, occ:16.7, stores:1705,  net:42803 },
+];
+
+// ─── 제휴점당 숙박일수 area-line chart ───────────────────────────────────
+function occTrend(id) {
+  const svg = document.getElementById(id);
+  const W = svg.getBoundingClientRect().width || 700;
+  const H = 220;
+  svg.setAttribute('height', H);
+  svg.innerHTML = '';
+
+  const ml = 46, mr = 16, mt = 24, mb = 50;
+  const pw = W - ml - mr, ph = H - mt - mb;
+  const yMax = 60;
+  const ys = v => mt + ph - (v / yMax) * ph;
+  const xs = i => ml + (i / (effData.length - 1)) * pw;
+
+  // grid
+  [0, 15, 30, 45, 60].forEach(v => {
+    const y = ys(v);
+    svgEl('line', { x1: ml, x2: ml + pw, y1: y, y2: y,
+      stroke: cv('--grid'), 'stroke-width': 1 }, svg);
+    svgText(v + '일', { x: ml - 6, y: y + 4, 'text-anchor': 'end',
+      'font-size': 11, fill: cv('--text-muted') }, svg);
+  });
+  svgEl('line', { x1: ml, x2: ml + pw, y1: ys(0), y2: ys(0),
+    stroke: cv('--baseline'), 'stroke-width': 1.5 }, svg);
+
+  // area
+  const areaD = effData.map((d, i) => `${i === 0 ? 'M' : 'L'}${xs(i)},${ys(d.perStore)}`).join(' ')
+    + ` L${xs(effData.length-1)},${ys(0)} L${xs(0)},${ys(0)} Z`;
+  svgEl('path', { d: areaD, fill: cv('--s1'), opacity: '0.12' }, svg);
+
+  // line
+  const lineD = effData.map((d, i) => `${i === 0 ? 'M' : 'L'}${xs(i)},${ys(d.perStore)}`).join(' ');
+  svgEl('path', { d: lineD, fill: 'none', stroke: cv('--s1'), 'stroke-width': 2.5,
+    'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+
+  // dots + labels
+  const peakVal = Math.max(...effData.map(e => e.perStore));
+  effData.forEach((d, i) => {
+    const x = xs(i), y = ys(d.perStore);
+
+    // value label: 첫 3개, 마지막, 피크
+    if (i <= 2 || i === effData.length - 1 || d.perStore === peakVal) {
+      svgText(d.perStore + '일', { x, y: y - 8, 'text-anchor': 'middle',
+        'font-size': 10, 'font-weight': '700', fill: cv('--s1') }, svg);
+    }
+
+    const dot = svgEl('circle', { cx: x, cy: y, r: 5, fill: cv('--s1'),
+      stroke: cv('--surface-1'), 'stroke-width': 2, style: 'cursor:pointer' }, svg);
+    dot.addEventListener('mouseenter', e => {
+      dot.setAttribute('r', '7');
+      showTip(e, d.label,
+        `제휴점당 ${d.perStore}일<br>점유율 ${d.occ}%<br>제휴점 ${d.stores.toLocaleString('ko-KR')}개<br>Net 예약 ${d.net.toLocaleString('ko-KR')}건`);
+    });
+    dot.addEventListener('mouseleave', () => { dot.setAttribute('r', '5'); hideTip(); });
+
+    // X label (rotated)
+    const lbl = svgEl('text', { x, y: H - mb + 14, 'text-anchor': 'end',
+      'font-size': 10, fill: cv('--text-secondary'),
+      transform: `rotate(-40, ${x}, ${H - mb + 14})` }, svg);
+    lbl.textContent = d.label;
+  });
+}
+
+// ─── 제휴점 수 bar trend ──────────────────────────────────────────────────
+function storeTrend(id) {
+  const svg = document.getElementById(id);
+  const W = svg.getBoundingClientRect().width || 700;
+  const H = 90;
+  svg.setAttribute('height', H);
+  svg.innerHTML = '';
+
+  const ml = 46, mr = 16, mt = 8, mb = 12;
+  const pw = W - ml - mr, ph = H - mt - mb;
+  const maxV = Math.max(...effData.map(d => d.stores));
+  const ys = v => mt + ph - (v / (maxV * 1.1)) * ph;
+  const bw = Math.max(pw / effData.length * 0.6, 8);
+  const xs = i => ml + (i / (effData.length - 1)) * pw;
+
+  // single y-axis label
+  svgText(maxV.toLocaleString('ko-KR') + '개', { x: ml - 6, y: mt + 10,
+    'text-anchor': 'end', 'font-size': 10, fill: cv('--text-muted') }, svg);
+  svgText('0', { x: ml - 6, y: ys(0) + 4, 'text-anchor': 'end',
+    'font-size': 10, fill: cv('--text-muted') }, svg);
+  svgEl('line', { x1: ml, x2: ml + pw, y1: ys(0), y2: ys(0),
+    stroke: cv('--baseline'), 'stroke-width': 1 }, svg);
+
+  // sequential fill: step by index
+  effData.forEach((d, i) => {
+    const x = xs(i);
+    const by = ys(d.stores), bh = ys(0) - by;
+    // sequential blue: lightest for smallest, darkest for largest
+    const t = i / (effData.length - 1);
+    const lerpHex = (a, b, t) => {
+      const ah = parseInt(a,16), bh2 = parseInt(b,16);
+      return Math.round(ah + (bh2 - ah) * t).toString(16).padStart(2,'0');
+    };
+    const r = lerpHex('cd','1c',t), g = lerpHex('e2','5c',t), b2 = lerpHex('fb','ab',t);
+    const col = `#${r}${g}${b2}`;
+
+    const rect = svgEl('rect', { x: x - bw/2, y: by, width: bw, height: Math.max(bh,1),
+      fill: col, rx: 2, style: 'cursor:pointer;transition:opacity .1s' }, svg);
+    rect.addEventListener('mouseenter', e => {
+      rect.setAttribute('opacity', '.75');
+      showTip(e, d.label, `제휴점 수 ${d.stores.toLocaleString('ko-KR')}개`);
+    });
+    rect.addEventListener('mouseleave', () => { rect.setAttribute('opacity','1'); hideTip(); });
+  });
+}
+
+// ─── render all ───────────────────────────────────────────────────────────
+function render() {
+  groupedBar('c-gmv', [
+    { label: '5월', v25: 11.16, v26: 65.90,
+      fmt25: '11.16억원 (25년)', fmt26: '65.90억원 (26년)' },
+    { label: '6월', v25: 22.16, v26: 95.69,
+      fmt25: '22.16억원 (25년)', fmt26: '95.69억원 (26년)' },
+  ], {
+    fmtY: v => v === 0 ? '0' : v.toFixed(0) + '억',
+    fmtLabel: v => v.toFixed(1) + '억',
+    ml: 52,
+  });
+
+  groupedBar('c-orders', [
+    { label: '5월', v25: 5710, v26: 32373,
+      fmt25: '5,710개 (25년)', fmt26: '32,373개 (26년)' },
+    { label: '6월', v25: 9992, v26: 42803,
+      fmt25: '9,992개 (25년)', fmt26: '42,803개 (26년)' },
+  ], {
+    fmtY: v => v === 0 ? '0' : (v / 10000).toFixed(0) + '만',
+    fmtLabel: v => v.toLocaleString('ko-KR') + '개',
+    ml: 44,
+  });
+
+  vertStackedBar('c-channel', [
+    { label: '25년 5월', segs: [
+      { label: 'GC', v: 1006938839, color: cv('--s1') },
+      { label: 'Naver', v: 45129300, color: cv('--s3') },
+      { label: '홈+수기', v: 43685600, color: cv('--s2') },
+    ]},
+    { label: '26년 5월', segs: [
+      { label: 'GC', v: 5364065863, color: cv('--s1') },
+      { label: 'Naver', v: 645316294, color: cv('--s3') },
+      { label: '홈+수기', v: 195778628, color: cv('--s2') },
+    ]},
+    { label: '25년 6월', segs: [
+      { label: 'GC', v: 2052191221, color: cv('--s1') },
+      { label: 'Naver', v: 71447300, color: cv('--s3') },
+      { label: '홈+수기', v: 50183650, color: cv('--s2') },
+    ]},
+    { label: '26년 6월', segs: [
+      { label: 'GC', v: 7920444391, color: cv('--s1') },
+      { label: 'Naver', v: 935408202, color: cv('--s3') },
+      { label: '홈+수기', v: 261124728, color: cv('--s2') },
+    ]},
+  ]);
+
+  dumbbell('c-cancel', [
+    { label: '5월', v25: 26.6, v26: 25.8 },
+    { label: '6월', v25: 27.1, v26: 28.5 },
+  ], {
+    yMin: 24, yMax: 31,
+    gridTicks: [24, 26, 28, 30],
+    fmtTick: v => v + '%',
+    fmtTip:  v => '취소율 ' + v + '%',
+  });
+
+  // ASP
+  groupedBar('c-asp', [
+    { label: '5월', v25: 178319, v26: 221458,
+      fmt25: '178,319원 (25년)', fmt26: '221,458원 (26년)' },
+    { label: '6월', v25: 249817, v26: 242757,
+      fmt25: '249,817원 (25년)', fmt26: '242,757원 (26년)' },
+  ], {
+    fmtY: v => v === 0 ? '0' : Math.round(v / 10000) + '만',
+    fmtLabel: v => Math.round(v / 10000) + '만원',
+    ml: 44,
+  });
+
+  // ADR
+  groupedBar('c-adr', [
+    { label: '5월', v25: 162511, v26: 177930,
+      fmt25: '162,511원 (25년)', fmt26: '177,930원 (26년)' },
+    { label: '6월', v25: 211346, v26: 198987,
+      fmt25: '211,346원 (25년)', fmt26: '198,987원 (26년)' },
+  ], {
+    fmtY: v => v === 0 ? '0' : Math.round(v / 10000) + '만',
+    fmtLabel: v => Math.round(v / 10000) + '만원',
+    ml: 44,
+  });
+
+  // 숙박일수
+  groupedBar('c-nights', [
+    { label: '5월', v25: 282, v26: 1333,
+      fmt25: '282일 (25년)', fmt26: '1,333일 (26년)' },
+    { label: '6월', v25: 513, v26: 1980,
+      fmt25: '513일 (25년)', fmt26: '1,980일 (26년)' },
+  ], {
+    fmtY: v => v === 0 ? '0' : v.toLocaleString('ko-KR') + '일',
+    fmtLabel: v => v.toLocaleString('ko-KR') + '일',
+    ml: 52,
+  });
+
+  occTrend('c-occ-trend');
+  storeTrend('c-store-trend');
+
+  // 예약당 박 수
+  dumbbell('c-nights-per-booking', [
+    { label: '5월', v25: 1.1, v26: 1.2 },
+    { label: '6월', v25: 1.2, v26: 1.2 },
+  ], {
+    yMin: 0.8, yMax: 1.6,
+    gridTicks: [0.8, 1.0, 1.2, 1.4],
+    fmtTick: v => v.toFixed(1) + '일',
+    fmtTip:  v => v.toFixed(1) + '일',
+  });
+}
+
+render();
+window.addEventListener('resize', () => {
+  clearTimeout(window._rt);
+  window._rt = setTimeout(render, 80);
+});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', render);
+</script>
+</body>
+</html>
