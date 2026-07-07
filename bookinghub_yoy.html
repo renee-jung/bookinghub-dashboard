@@ -47,17 +47,24 @@ body {
 h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
 .sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
 
-/* KPI row */
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-.kpi {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
+/* YoY summary table */
+.yoy-wrap { overflow-x: auto; margin-bottom: 20px; }
+.yoy-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+.yoy-table th {
+  font-size: 12px; color: var(--text-muted); font-weight: 500;
+  padding: 0 20px 12px; text-align: left;
+  border-bottom: 1px solid var(--border);
 }
-.kpi-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; letter-spacing: .02em; }
-.kpi-val { font-size: 30px; font-weight: 800; color: var(--delta); line-height: 1; margin-bottom: 3px; }
-.kpi-detail { font-size: 11px; color: var(--text-secondary); }
+.yoy-table th:first-child { padding-left: 0; min-width: 110px; }
+.yoy-table td {
+  padding: 18px 20px; border-bottom: 1px solid var(--border);
+  vertical-align: top; min-width: 130px;
+}
+.yoy-table td:first-child { padding-left: 0; font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.yoy-table tbody tr:last-child td { border-bottom: none; }
+.yoy-pct { font-size: 22px; font-weight: 800; color: var(--delta); line-height: 1.1; margin-bottom: 5px; }
+.yoy-sub { font-size: 11px; color: var(--text-secondary); }
+.yoy-empty { font-size: 20px; color: var(--text-muted); font-weight: 300; }
 
 /* Chart cards */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
@@ -88,7 +95,6 @@ h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
 #tt-body { color: var(--text-secondary); line-height: 1.6; }
 
 @media (max-width: 620px) {
-  .kpi-row { grid-template-columns: 1fr 1fr; }
   .row2 { grid-template-columns: 1fr; }
 }
 </style>
@@ -98,30 +104,69 @@ h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
 <h1>Bookinghub 월누적 YoY 비교</h1>
 <div class="sub">25년 vs 26년 · 5월·6월 말일 기준 누적</div>
 
-<div class="kpi-row">
-  <div class="kpi">
-    <div class="kpi-label">NET GMV YoY · 5월</div>
-    <div class="kpi-val">+490%</div>
-    <div class="kpi-detail">11.2억 → 65.9억</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">NET GMV YoY · 6월</div>
-    <div class="kpi-val">+332%</div>
-    <div class="kpi-detail">22.2억 → 95.7억</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">제휴점 수 YoY · 5월</div>
-    <div class="kpi-val">+718%</div>
-    <div class="kpi-detail">189개 → 1,547개</div>
-  </div>
-  <div class="kpi">
-    <div class="kpi-label">제휴점 수 YoY · 6월</div>
-    <div class="kpi-val">+536%</div>
-    <div class="kpi-detail">268개 → 1,705개</div>
-  </div>
+<div class="yoy-wrap">
+  <table class="yoy-table">
+    <thead>
+      <tr>
+        <th>지표명</th>
+        <th>5월 YoY</th>
+        <th>6월 YoY</th>
+        <th>7월 YoY</th>
+        <th>8월 YoY</th>
+        <th>9월 YoY</th>
+        <th>10월 YoY</th>
+        <th>11월 YoY</th>
+        <th>12월 YoY</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Gross GMV</td>
+        <td><div class="yoy-pct">+484%</div><div class="yoy-sub">15.2억 → 88.8억</div></td>
+        <td><div class="yoy-pct">+340%</div><div class="yoy-sub">30.4억 → 133.8억</div></td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+      </tr>
+      <tr>
+        <td>Net GMV</td>
+        <td><div class="yoy-pct">+490%</div><div class="yoy-sub">11.2억 → 65.9억</div></td>
+        <td><div class="yoy-pct">+332%</div><div class="yoy-sub">22.2억 → 95.7억</div></td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+      </tr>
+      <tr>
+        <td>제휴점 수</td>
+        <td><div class="yoy-pct">+718%</div><div class="yoy-sub">189개 → 1,547개</div></td>
+        <td><div class="yoy-pct">+536%</div><div class="yoy-sub">268개 → 1,705개</div></td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+        <td class="yoy-empty">-</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="row2">
+  <div class="card">
+    <div class="card-title">Gross GMV 월누적</div>
+    <div class="card-sub">억원 기준 · 말일 누적</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
+    </div>
+    <svg id="c-gross-gmv" width="100%" style="display:block;overflow:visible"></svg>
+  </div>
   <div class="card">
     <div class="card-title">Net GMV 월누적</div>
     <div class="card-sub">억원 기준 · 말일 누적</div>
@@ -131,6 +176,9 @@ h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
     </div>
     <svg id="c-gmv" width="100%" style="display:block;overflow:visible"></svg>
   </div>
+</div>
+
+<div class="row2">
   <div class="card">
     <div class="card-title">예약건수 (Net)</div>
     <div class="card-sub">개 기준 · 말일 누적</div>
@@ -140,17 +188,16 @@ h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
     </div>
     <svg id="c-orders" width="100%" style="display:block;overflow:visible"></svg>
   </div>
-</div>
-
-<div class="card card-full">
-  <div class="card-title">채널별 Net GMV (절대값)</div>
-  <div class="card-sub">GC · Naver · 홈페이지+수기예약 · 억원 기준</div>
-  <div class="legend">
-    <span class="li"><span class="ld" style="background:var(--s1)"></span>GC</span>
-    <span class="li"><span class="ld" style="background:var(--s3)"></span>Naver</span>
-    <span class="li"><span class="ld" style="background:var(--s2)"></span>홈페이지+수기</span>
+  <div class="card">
+    <div class="card-title">채널별 Net GMV (절대값)</div>
+    <div class="card-sub">GC · Naver · 홈페이지+수기예약 · 억원 기준</div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--s1)"></span>GC</span>
+      <span class="li"><span class="ld" style="background:var(--s3)"></span>Naver</span>
+      <span class="li"><span class="ld" style="background:var(--s2)"></span>홈페이지+수기</span>
+    </div>
+    <svg id="c-channel" width="100%" style="display:block;overflow:visible"></svg>
   </div>
-  <svg id="c-channel" width="100%" style="display:block;overflow:visible"></svg>
 </div>
 
 <div class="card card-full">
@@ -184,26 +231,6 @@ h1 { font-size: 18px; font-weight: 700; margin-bottom: 3px; }
   </div>
 </div>
 
-<div class="row2">
-  <div class="card">
-    <div class="card-title">숙박일수 총 (말일 당일)</div>
-    <div class="card-sub">room-nights · 일 기준</div>
-    <div class="legend">
-      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
-      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
-    </div>
-    <svg id="c-nights" width="100%" style="display:block;overflow:visible"></svg>
-  </div>
-  <div class="card">
-    <div class="card-title">예약당 박 수 (말일 당일)</div>
-    <div class="card-sub">평균 박 수 · 일 기준</div>
-    <div class="legend">
-      <span class="li"><span class="ld" style="background:var(--s1)"></span>25년</span>
-      <span class="li"><span class="ld" style="background:var(--s2)"></span>26년</span>
-    </div>
-    <svg id="c-nights-per-booking" width="100%" style="display:block;overflow:visible"></svg>
-  </div>
-</div>
 
 <div class="card card-full" style="margin-bottom:14px">
   <div class="card-title">제휴점당 월 숙박일수 추이 (25년 5월 ~ 26년 6월)</div>
@@ -267,7 +294,7 @@ function groupedBar(id, months, opts) {
   const ml = opts.ml || 52, mr = 14, mt = 28, mb = 36;
   const pw = W - ml - mr, ph = H - mt - mb;
 
-  const maxV = Math.max(...months.flatMap(m => [m.v25, m.v26]));
+  const maxV = Math.max(...months.flatMap(m => [m.v25, m.v26]).filter(v => v != null));
   const yMax = maxV * 1.18;
   const ys = v => mt + ph - (v / yMax) * ph;
 
@@ -293,6 +320,7 @@ function groupedBar(id, months, opts) {
       { v: m.v26, color: cv('--s2'), label: '26년', fmtV: m.fmt26 },
     ];
     bars.forEach((b, bi) => {
+      if (b.v == null) return;
       const bx = bi === 0 ? gx - bw - gap / 2 : gx + gap / 2;
       const by = ys(b.v);
       const bh = ys(0) - by;
@@ -325,7 +353,7 @@ function vertStackedBar(id, groups) {
   // groups: [{label, segs:[{label, v, color}]}]
   const svg = document.getElementById(id);
   const W = svg.getBoundingClientRect().width || 600;
-  const H = 280;
+  const H = 220;
   svg.setAttribute('height', H);
   svg.innerHTML = '';
 
@@ -433,6 +461,12 @@ function dumbbell(id, rows, opts) {
   const step = pw / (rows.length + 1);
   rows.forEach((r, i) => {
     const x = ml + (i + 1) * step;
+
+    svgText(r.label, { x, y: H - mb + 18, 'text-anchor': 'middle',
+      'font-size': 12, fill: cv('--text-secondary') }, svg);
+
+    if (r.v25 == null || r.v26 == null) return;
+
     const y25 = ys(r.v25), y26 = ys(r.v26);
 
     svgEl('line', { x1: x, y1: Math.min(y25, y26), x2: x, y2: Math.max(y25, y26),
@@ -453,9 +487,6 @@ function dumbbell(id, rows, opts) {
     const lblY26 = r.v26 >= r.v25 ? y26 + 18 : y26 - 10;
     svgText(fmtTick(r.v25), { x: x - 22, y: lblY25, 'font-size': 11, 'font-weight': '600', fill: cv('--s1') }, svg);
     svgText(fmtTick(r.v26), { x: x + 8,  y: lblY26, 'font-size': 11, 'font-weight': '600', fill: cv('--s2') }, svg);
-
-    svgText(r.label, { x, y: H - mb + 18, 'text-anchor': 'middle',
-      'font-size': 12, fill: cv('--text-secondary') }, svg);
   });
 }
 
@@ -587,12 +618,27 @@ function storeTrend(id) {
 }
 
 // ─── render all ───────────────────────────────────────────────────────────
+const EMPTY_MONTHS = ['7월','8월','9월','10월','11월','12월'].map(l => ({ label: l, v25: null, v26: null }));
+
 function render() {
+  groupedBar('c-gross-gmv', [
+    { label: '5월', v25: 15.21, v26: 88.85,
+      fmt25: '15.21억원 (25년)', fmt26: '88.85억원 (26년)' },
+    { label: '6월', v25: 30.39, v26: 133.75,
+      fmt25: '30.39억원 (25년)', fmt26: '133.75억원 (26년)' },
+    ...EMPTY_MONTHS,
+  ], {
+    fmtY: v => v === 0 ? '0' : v.toFixed(0) + '억',
+    fmtLabel: v => v.toFixed(1) + '억',
+    ml: 52,
+  });
+
   groupedBar('c-gmv', [
     { label: '5월', v25: 11.16, v26: 65.90,
       fmt25: '11.16억원 (25년)', fmt26: '65.90억원 (26년)' },
     { label: '6월', v25: 22.16, v26: 95.69,
       fmt25: '22.16억원 (25년)', fmt26: '95.69억원 (26년)' },
+    ...EMPTY_MONTHS,
   ], {
     fmtY: v => v === 0 ? '0' : v.toFixed(0) + '억',
     fmtLabel: v => v.toFixed(1) + '억',
@@ -604,6 +650,7 @@ function render() {
       fmt25: '5,710개 (25년)', fmt26: '32,373개 (26년)' },
     { label: '6월', v25: 9992, v26: 42803,
       fmt25: '9,992개 (25년)', fmt26: '42,803개 (26년)' },
+    ...EMPTY_MONTHS,
   ], {
     fmtY: v => v === 0 ? '0' : (v / 10000).toFixed(0) + '만',
     fmtLabel: v => v.toLocaleString('ko-KR') + '개',
@@ -636,6 +683,7 @@ function render() {
   dumbbell('c-cancel', [
     { label: '5월', v25: 26.6, v26: 25.8 },
     { label: '6월', v25: 27.1, v26: 28.5 },
+    ...EMPTY_MONTHS,
   ], {
     yMin: 24, yMax: 31,
     gridTicks: [24, 26, 28, 30],
@@ -649,6 +697,7 @@ function render() {
       fmt25: '178,319원 (25년)', fmt26: '221,458원 (26년)' },
     { label: '6월', v25: 249817, v26: 242757,
       fmt25: '249,817원 (25년)', fmt26: '242,757원 (26년)' },
+    ...EMPTY_MONTHS,
   ], {
     fmtY: v => v === 0 ? '0' : Math.round(v / 10000) + '만',
     fmtLabel: v => Math.round(v / 10000) + '만원',
@@ -661,37 +710,15 @@ function render() {
       fmt25: '162,511원 (25년)', fmt26: '177,930원 (26년)' },
     { label: '6월', v25: 211346, v26: 198987,
       fmt25: '211,346원 (25년)', fmt26: '198,987원 (26년)' },
+    ...EMPTY_MONTHS,
   ], {
     fmtY: v => v === 0 ? '0' : Math.round(v / 10000) + '만',
     fmtLabel: v => Math.round(v / 10000) + '만원',
     ml: 44,
   });
 
-  // 숙박일수
-  groupedBar('c-nights', [
-    { label: '5월', v25: 282, v26: 1333,
-      fmt25: '282일 (25년)', fmt26: '1,333일 (26년)' },
-    { label: '6월', v25: 513, v26: 1980,
-      fmt25: '513일 (25년)', fmt26: '1,980일 (26년)' },
-  ], {
-    fmtY: v => v === 0 ? '0' : v.toLocaleString('ko-KR') + '일',
-    fmtLabel: v => v.toLocaleString('ko-KR') + '일',
-    ml: 52,
-  });
-
   occTrend('c-occ-trend');
   storeTrend('c-store-trend');
-
-  // 예약당 박 수
-  dumbbell('c-nights-per-booking', [
-    { label: '5월', v25: 1.1, v26: 1.2 },
-    { label: '6월', v25: 1.2, v26: 1.2 },
-  ], {
-    yMin: 0.8, yMax: 1.6,
-    gridTicks: [0.8, 1.0, 1.2, 1.4],
-    fmtTick: v => v.toFixed(1) + '일',
-    fmtTip:  v => v.toFixed(1) + '일',
-  });
 }
 
 render();
